@@ -1,0 +1,36 @@
+version: '3.1'
+networks:
+    queue-pgsql:
+      driver: bridge
+services:
+  pgsql-master:
+    image: docker.io/bitnami/postgresql:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+      POSTGRES_DB: docker
+      POSTGRESQL_REPLICATION_MODE: master
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+    ports:
+      - 5445:5432
+    networks:
+      - queue-pgsql
+  pgsql-slave:
+    image: docker.io/bitnami/postgresql:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+      POSTGRES_DB: docker
+      POSTGRESQL_REPLICATION_MODE: slave
+      POSTGRESQL_REPLICATION_USER: repl_user
+      POSTGRESQL_REPLICATION_PASSWORD: repl_password
+      POSTGRESQL_MASTER_HOST: pgsql-master
+      POSTGRESQL_MASTER_PORT_NUMBER: 5432
+    ports:
+      - 5446:5432
+    networks:
+      - queue-pgsql
+

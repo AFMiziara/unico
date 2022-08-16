@@ -1,0 +1,228 @@
+basePath: /
+definitions:
+  models.FeiraLivre:
+    properties:
+      areap:
+        type: integer
+      bairro:
+        type: string
+      coddist:
+        type: integer
+      codsubpref:
+        type: integer
+      distrito:
+        type: string
+      id:
+        type: string
+      lat:
+        type: integer
+      logradouro:
+        type: string
+      longi:
+        type: integer
+      nome_feira:
+        type: string
+      numero:
+        type: string
+      referencia:
+        type: string
+      regiao5:
+        type: string
+      regiao8:
+        type: string
+      registro:
+        type: string
+      setcens:
+        type: integer
+      subprefe:
+        type: string
+    type: object
+  models.InsertUpdateFeiras:
+    properties:
+      areap:
+        type: integer
+      bairro:
+        type: string
+      coddist:
+        type: integer
+      codsubpref:
+        type: integer
+      distrito:
+        type: string
+      lat:
+        type: integer
+      logradouro:
+        type: string
+      longi:
+        type: integer
+      nome_feira:
+        type: string
+      numero:
+        type: string
+      referencia:
+        type: string
+      regiao5:
+        type: string
+      regiao8:
+        type: string
+      registro:
+        type: string
+      setcens:
+        type: integer
+      subprefe:
+        type: string
+    type: object
+  models.SearchFeira:
+    properties:
+      bairro:
+        type: string
+      distrito:
+        type: string
+      nomeFeira:
+        type: string
+      pagina:
+        type: string
+      regiao5:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /api/feiras:
+    post:
+      consumes:
+      - application/json
+      description: Feiras API
+      parameters:
+      - description: body request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.InsertUpdateFeiras'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Feiras
+  /api/feiras/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Feira API
+      parameters:
+      - description: id to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "404":
+          description: ""
+      summary: Feira
+    get:
+      consumes:
+      - application/json
+      description: Feiras API
+      parameters:
+      - description: id to search
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "404":
+          description: ""
+      summary: Feiras
+    put:
+      consumes:
+      - application/json
+      description: Feiras API
+      parameters:
+      - description: body request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.FeiraLivre'
+      - description: id to update
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "404":
+          description: ""
+      summary: Feiras
+  /api/feiras/p/{page}:
+    get:
+      consumes:
+      - application/json
+      description: Feiras API
+      parameters:
+      - description: page number
+        in: path
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Feiras
+  /api/feiras/search:
+    post:
+      consumes:
+      - application/json
+      description: Feiras API
+      parameters:
+      - description: body request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.SearchFeira'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Feiras
+  /healthcheck:
+    get:
+      description: HealthCheck API
+      responses:
+        "200":
+          description: ""
+      summary: HealthCheck
+swagger: "2.0"
