@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/bytedance/sonic"
 	router "github.com/fsvxavier/unico/api"
 	"github.com/fsvxavier/unico/database"
 	_ "github.com/fsvxavier/unico/docs"
@@ -45,7 +46,10 @@ func main() {
 	currentTime := time.Now()
 
 	// Start a new fiber app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		JSONEncoder: sonic.Marshal,
+		JSONDecoder: sonic.Unmarshal,
+	})
 
 	app.Use(recover.New())
 
@@ -91,7 +95,9 @@ func main() {
 	}))
 
 	app.Get("/apimetrics", monitor.New(monitor.Config{
-		APIOnly: true,
+		Title:   "Fiber Monitor",
+		Refresh: 3 * time.Second,
+		APIOnly: false,
 		Next:    nil,
 	}))
 

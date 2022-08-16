@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
+	github.com/bytedance/sonic v1.3.5
 	github.com/gofiber/fiber/v2 v2.34.1
 	github.com/google/uuid v1.3.0
 	github.com/kr/pretty v0.3.0 // indirect
