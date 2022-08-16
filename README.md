@@ -79,7 +79,7 @@ Configurando as variáveis de ambiente
 | DB_SL_USER  | Usuário de aplicação da base de dados replica | | :white_check_mark: |
 | DB_SL_PASSWORD  | Senha do usuário da aplicação da base de dados replica | | :white_check_mark: |
 | EXECUTE_MIGRATION  | Ativar ou desativar o migrations (criação ou atualização de tabelas baseado nas models) | | :white_check_mark: |
-| APP | Nome do app | dock | :white_check_mark: |
+| APP | Nome do app | unico | :white_check_mark: |
 | LOGRUS_LOG_LEVEL | Nível de severidade do log a ser impresso | INFO | :white_check_mark: |
 | VERSION_APP | versão da aplicação | INFO | :white_check_mark: |
 | VERSION_API | versão da API | INFO | :white_check_mark: |
@@ -116,7 +116,7 @@ $ go build
 ```
 Executando o projeto
 ``` bash
-$ go run main.app or ./dock
+$ go run main.app or ./unico
 ```
 ## Testes
 ```bash
