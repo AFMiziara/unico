@@ -9,41 +9,25 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-func NewDatabase() (*gorm.DB, sqlmock.Sqlmock) {
+func NewDatabase() (*gorm.DB, sqlmock.Sqlmock, error) {
 
 	// get db and mock
-	sqlDB, mock, err := sqlmock.New(
-		sqlmock.QueryMatcherOption(sqlmock.QueryMatcherRegexp),
-	)
+	sqlDB, mock, err := sqlmock.New()
 	if err != nil {
 		log.Fatalf("[sqlmock new] %s", err)
 	}
 
 	// create dialector
 	dialector := postgres.New(postgres.Config{
-		Conn:       sqlDB,
-		DriverName: "postgres",
+		Conn: sqlDB,
 	})
-
-	// a SELECT VERSION() query will be run when gorm opens the database
-	// so we need to expect that here
-	/*
-		columns := []string{"version"}
-		mock.ExpectQuery("SELECT VERSION()").WithArgs().WillReturnRows(
-			mock.NewRows(columns).FromCSVString("1"),
-		)
-	*/
 
 	// open the database
 	db, err := gorm.Open(dialector, &gorm.Config{
-		PrepareStmt: true,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
 	})
-	if err != nil {
-		log.Fatalf("[gorm open] %s", err)
-	}
 
-	return db, mock
+	return db, mock, err
 }

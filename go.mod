@@ -11,6 +11,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/onrik/gorm-logrus v0.4.0
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/selvatico/go-mocket v1.0.7
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.2
 	github.com/swaggo/swag v1.8.2

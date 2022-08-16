@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fsvxavier/unico/internal/mocks"
 	"github.com/fsvxavier/unico/internal/models"
 	"github.com/fsvxavier/unico/pkg/enviroment"
 	"github.com/stretchr/testify/assert"
@@ -15,7 +14,7 @@ type v2Suite struct {
 	db *gorm.DB
 }
 
-func setupTest() {
+func SetupTests() {
 
 	dir, _ := os.Getwd()
 	os.Setenv("ENV", "production")
@@ -29,9 +28,10 @@ func setupTest() {
 
 func TestGetFeiraSearch(t *testing.T) {
 
-	setupTest()
+	SetupTests()
 
-	db, mock := mocks.NewDatabase()
+	s := &v2Suite{}
+	a := &FeirasRepository{s.db}
 
 	mockSearchData := models.SearchFeira{
 		Pagina:    "1",
@@ -42,15 +42,7 @@ func TestGetFeiraSearch(t *testing.T) {
 	}
 
 	t.Run("sucess", func(t *testing.T) {
-		mock.MatchExpectationsInOrder(false)
 
-		query := (`SELECT count(1) FROM "feira_livre" WHERE distrito like $1 AND regiao5 like $2 AND nome_feira like $3 AND bairro like $4`)
-
-		mock.ExpectQuery(query).WithArgs().
-			//WithArgs("%"+mockSearchData.Distrito+"%", "%"+mockSearchData.Regiao5+"%", "%"+mockSearchData.NomeFeira+"%", "%"+mockSearchData.Bairro+"%").
-			WillReturnRows()
-
-		a := NewFeirasRepository(db)
 		got, err := a.GetFeiraSearch(mockSearchData)
 
 		assert.NoError(t, err)
@@ -60,8 +52,6 @@ func TestGetFeiraSearch(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 
 		mockSearchData.Pagina = ""
-
-		a := NewFeirasRepository(db)
 		_, err := a.GetFeiraSearch(mockSearchData)
 
 		assert.Error(t, err)
@@ -70,7 +60,7 @@ func TestGetFeiraSearch(t *testing.T) {
 
 func TestGetFeirasPagination(t *testing.T) {
 
-	setupTest()
+	SetupTests()
 
 	s := &v2Suite{}
 	a := &FeirasRepository{s.db}
@@ -95,7 +85,7 @@ func TestGetFeirasPagination(t *testing.T) {
 
 func TestGetFeira(t *testing.T) {
 
-	setupTest()
+	SetupTests()
 
 	s := &v2Suite{}
 	a := &FeirasRepository{s.db}
