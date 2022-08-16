@@ -7,12 +7,11 @@ import (
 	"github.com/fsvxavier/unico/internal/models"
 	"github.com/fsvxavier/unico/pkg/enviroment"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 )
 
-type v2Suite struct {
-	db *gorm.DB
-}
+var (
+	fr FeirasRepository
+)
 
 func SetupTests() {
 
@@ -30,9 +29,6 @@ func TestGetFeiraSearch(t *testing.T) {
 
 	SetupTests()
 
-	s := &v2Suite{}
-	a := &FeirasRepository{s.db}
-
 	mockSearchData := models.SearchFeira{
 		Pagina:    "1",
 		Bairro:    "FORMOSA",
@@ -40,19 +36,19 @@ func TestGetFeiraSearch(t *testing.T) {
 		Regiao5:   "Leste",
 		NomeFeira: "RECORD",
 	}
+	t.Run("sucess_GetFeiraSearch", func(t *testing.T) {
 
-	t.Run("sucess", func(t *testing.T) {
-
-		got, err := a.GetFeiraSearch(mockSearchData)
+		got, err := fr.GetFeiraSearch(mockSearchData)
 
 		assert.NoError(t, err)
-		assert.NotNil(t, got)
+		assert.NotNil(t, got.Rows)
 	})
 
-	t.Run("error", func(t *testing.T) {
+	t.Run("error_GetFeiraSearch", func(t *testing.T) {
 
 		mockSearchData.Pagina = ""
-		_, err := a.GetFeiraSearch(mockSearchData)
+
+		_, err := fr.GetFeiraSearch(mockSearchData)
 
 		assert.Error(t, err)
 	})
@@ -62,14 +58,11 @@ func TestGetFeirasPagination(t *testing.T) {
 
 	SetupTests()
 
-	s := &v2Suite{}
-	a := &FeirasRepository{s.db}
-
 	t.Run("sucess", func(t *testing.T) {
 
 		page := "1"
 
-		got, err := a.GetFeirasPagination(page)
+		got, err := fr.GetFeirasPagination(page)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
@@ -77,7 +70,7 @@ func TestGetFeirasPagination(t *testing.T) {
 
 	t.Run("error", func(t *testing.T) {
 
-		_, err := a.GetFeirasPagination("")
+		_, err := fr.GetFeirasPagination("")
 
 		assert.Error(t, err)
 	})
@@ -87,14 +80,11 @@ func TestGetFeira(t *testing.T) {
 
 	SetupTests()
 
-	s := &v2Suite{}
-	a := &FeirasRepository{s.db}
-
 	t.Run("sucess", func(t *testing.T) {
 
 		id := "9658c7f9-d65b-406b-9c6f-c19b0c3de8a8"
 
-		got, err := a.GetFeira(id)
+		got, err := fr.GetFeira(id)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
@@ -102,7 +92,7 @@ func TestGetFeira(t *testing.T) {
 
 	t.Run("empty", func(t *testing.T) {
 
-		got, err := a.GetFeira("\\\\\\")
+		got, err := fr.GetFeira("\\\\\\")
 
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
