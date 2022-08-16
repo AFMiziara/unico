@@ -5,18 +5,19 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/arsmn/fiber-swagger/v2 v2.31.1
-	github.com/gin-gonic/gin v1.8.1
 	github.com/gofiber/fiber/v2 v2.34.1
 	github.com/google/uuid v1.3.0
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/kr/pretty v0.3.0 // indirect
 	github.com/onrik/gorm-logrus v0.4.0
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/selvatico/go-mocket v1.0.7
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.2
 	github.com/swaggo/swag v1.8.2
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.6
 	gorm.io/plugin/dbresolver v1.2.1

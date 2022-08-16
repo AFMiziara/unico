@@ -5,6 +5,11 @@ import (
 	"os"
 	"time"
 
+	router "github.com/fsvxavier/unico/api"
+	"github.com/fsvxavier/unico/database"
+	_ "github.com/fsvxavier/unico/docs"
+	"github.com/fsvxavier/unico/pkg/enviroment"
+	loggerLogrus "github.com/fsvxavier/unico/pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -12,11 +17,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	router "github.com/fsvxavier/unico/api"
-	"github.com/fsvxavier/unico/database"
-	_ "github.com/fsvxavier/unico/docs"
-	"github.com/fsvxavier/unico/pkg/enviroment"
-	loggerLogrus "github.com/fsvxavier/unico/pkg/logger"
 )
 
 // @title Fiber Example API
@@ -98,7 +98,7 @@ func main() {
 	app.Use(pprof.New())
 
 	// Initialize config default Logger
-	fileLog, err := os.OpenFile("logs/"+currentTime.Format("2006-01-02")+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
+	fileLog, err := os.OpenFile("logs/fiber_"+currentTime.Format("2006-01-02")+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
 		msgError := fmt.Sprintf("Error opening file: %v", err)
 		logLogrus.LogIt("ERROR", msgError, nil)

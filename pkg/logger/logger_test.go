@@ -2,13 +2,11 @@ package logger_test
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"testing"
 
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
 	"github.com/fsvxavier/unico/pkg/logger"
+	"github.com/stretchr/testify/assert"
 )
 
 // Override for testing
@@ -152,30 +150,4 @@ func TestLogger(t *testing.T) {
 
 		assert.NotNil(t, logg)
 	})
-}
-
-func init() {
-	gin.SetMode(gin.TestMode)
-}
-
-func setupRouterLogger() *gin.Engine {
-	var logg logger.GenericLogger
-	logg.Module = "teste"
-	logg.GetLogger()
-
-	router := gin.New()
-	router.Use(logg.Logger(logg.Log.Logger))
-	router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "get")
-	})
-	router.POST("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "post")
-	})
-	router.PATCH("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "patch")
-	})
-	router.OPTIONS("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "options")
-	})
-	return router
 }
