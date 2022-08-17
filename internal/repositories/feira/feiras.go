@@ -8,6 +8,7 @@ import (
 	"github.com/fsvxavier/unico/internal/models"
 	"github.com/fsvxavier/unico/pkg/logger"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type feirasRepository struct {
@@ -91,7 +92,7 @@ func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLiv
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
-	err := db.Create(&feira).Error
+	err := db.Clauses(clause.Returning{}).Create(&feira).Error
 
 	return feira, err
 }
