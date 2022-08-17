@@ -51,16 +51,14 @@ func (_m *FeirasRepository) DeleteFeira(id string) error {
 }
 
 // GetFeira provides a mock function with given fields: id
-func (_m *FeirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
+func (_m *FeirasRepository) GetFeira(id string) (models.FeiraLivre, error) {
 	ret := _m.Called(id)
 
-	var r0 []models.FeiraLivre
-	if rf, ok := ret.Get(0).(func(string) []models.FeiraLivre); ok {
+	var r0 models.FeiraLivre
+	if rf, ok := ret.Get(0).(func(string) models.FeiraLivre); ok {
 		r0 = rf(id)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]models.FeiraLivre)
-		}
+		r0 = ret.Get(0).(models.FeiraLivre)
 	}
 
 	var r1 error

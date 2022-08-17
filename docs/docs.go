@@ -78,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": ""
                     },
-                    "500": {
+                    "404": {
                         "description": ""
                     }
                 }

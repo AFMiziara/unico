@@ -25,9 +25,6 @@ func NewFeirasRepository(db *gorm.DB) feiraInterfaces.FeirasRepository {
 
 func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pagination, error) {
 
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
-
 	numPage, err := strconv.Atoi(feira.Pagina)
 	if err != nil {
 		return database.Pagination{}, err
@@ -38,22 +35,22 @@ func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pa
 	}
 
 	if feira.Distrito != "" {
-		db = db.Where("distrito like ?", "%"+feira.Distrito+"%")
+		f.db = f.db.Where("distrito like ?", "%"+feira.Distrito+"%")
 	}
 
 	if feira.Regiao5 != "" {
-		db = db.Where("regiao5 like ?", "%"+feira.Regiao5+"%")
+		f.db = f.db.Where("regiao5 like ?", "%"+feira.Regiao5+"%")
 	}
 
 	if feira.NomeFeira != "" {
-		db = db.Where("nome_feira like ?", "%"+feira.NomeFeira+"%")
+		f.db = f.db.Where("nome_feira like ?", "%"+feira.NomeFeira+"%")
 	}
 
 	if feira.Bairro != "" {
-		db = db.Where("bairro like ?", "%"+feira.Bairro+"%")
+		f.db = f.db.Where("bairro like ?", "%"+feira.Bairro+"%")
 	}
 
-	err = db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras).Error
+	err = f.db.Scopes(paging.Paginates(Feiras, f.db)).Find(&Feiras).Error
 
 	paging.Rows = Feiras
 
@@ -61,9 +58,6 @@ func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pa
 }
 
 func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination, error) {
-
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
 
 	numPage, err := strconv.Atoi(page)
 	if err != nil {
@@ -74,45 +68,37 @@ func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination
 		Page: numPage,
 	}
 
-	err = db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras).Error
+	err = f.db.Scopes(paging.Paginates(Feiras, f.db)).Find(&Feiras).Error
 	paging.Rows = Feiras
 
 	return paging, err
 }
 
-func (f *feirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
+func (f *feirasRepository) GetFeira(id string) (models.FeiraLivre, error) {
 
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
+	err := f.db.Find(&Feira, "id = ?", id).Error
 
-	err := db.Find(&Feiras, "id = ?", id).Error
-
-	return Feiras, err
+	return Feira, err
 }
 
-func (f *feirasRepository) CreateFeira(Feira models.FeiraLivre) (models.FeiraLivre, error) {
+func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
 
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
+	feira.ID = ""
 
-	db.Create(&Feira)
+	f.db.Create(&feira)
 	return Feira, nil
 }
 
-func (f *feirasRepository) UpdateFeira(id string, InUpFeira models.FeiraLivre) (models.FeiraLivre, error) {
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
+func (f *feirasRepository) UpdateFeira(id string, inUpFeira models.FeiraLivre) (models.FeiraLivre, error) {
 
-	InUpFeira.ID = id
+	inUpFeira.ID = id
 
-	db.Find(&Feira).Where("id = ?", id).Save(&InUpFeira)
-	return InUpFeira, nil
+	f.db.Model(&Feira).Where("id = ?", id).Updates(inUpFeira)
+	return inUpFeira, nil
 }
 
 func (f *feirasRepository) DeleteFeira(id string) error {
-	var dbConn database.DbConnect
-	db := dbConn.ConnectDB()
 
-	err := db.Delete(&Feira, "id = ?", id).Error
+	err := f.db.Delete(&Feira, "id = ?", id).Error
 	return err
 }

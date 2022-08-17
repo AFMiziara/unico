@@ -8,7 +8,7 @@ import (
 //FeirasRepository ...
 type FeirasRepository interface {
 	GetFeirasPagination(page string) (database.Pagination, error)
-	GetFeira(id string) ([]models.FeiraLivre, error)
+	GetFeira(id string) (models.FeiraLivre, error)
 	CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error)
 	UpdateFeira(id string, feira models.FeiraLivre) (models.FeiraLivre, error)
 	DeleteFeira(id string) error
@@ -18,7 +18,7 @@ type FeirasRepository interface {
 //BancoRepository ...
 type FeirasUsecases interface {
 	GetFeirasPagination(page string) (database.Pagination, error)
-	GetFeira(id string) ([]models.FeiraLivre, error)
+	GetFeira(id string) (models.FeiraLivre, error)
 	CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error)
 	UpdateFeira(id string, feira models.FeiraLivre) (models.FeiraLivre, error)
 	DeleteFeira(id string) error

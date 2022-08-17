@@ -70,7 +70,7 @@ func GetFeiraSearch(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Success 200
-// @Failure 500
+// @Failure 404
 // @Router /api/feiras/p/{page} [get]
 func GetFeirasPagination(c *fiber.Ctx) error {
 
@@ -99,7 +99,12 @@ func GetFeira(c *fiber.Ctx) error {
 
 	initFeiraHandler()
 
-	feira, _ := feirasUsecases.GetFeira(c.Params("id"))
+	id := c.Params("id")
+
+	feira, _ := feirasUsecases.GetFeira(id)
+	if feira.ID == "" {
+		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "No Feiras present", "data": nil})
+	}
 
 	// Return the Feira with the Id
 	return c.JSON(fiber.Map{"status": "success", "message": "Found data", "data": feira})

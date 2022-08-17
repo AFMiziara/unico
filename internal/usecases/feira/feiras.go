@@ -23,7 +23,7 @@ func (t *FeirasUsecases) GetFeiraSearch(feira models.SearchFeira) (database.Pagi
 	return t.FeirasRepository.GetFeiraSearch(feira)
 }
 
-func (f *FeirasUsecases) GetFeira(id string) ([]models.FeiraLivre, error) {
+func (f *FeirasUsecases) GetFeira(id string) (models.FeiraLivre, error) {
 	return f.FeirasRepository.GetFeira(id)
 }
 
