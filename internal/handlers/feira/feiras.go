@@ -15,7 +15,6 @@ var (
 	Feiras           []models.FeiraLivre
 	Feira            models.FeiraLivre
 	SearchFeira      models.SearchFeira
-	InUpFeiras       models.InsertUpdateFeiras
 	feirasRepository feiraInterfaces.FeirasRepository
 	feirasUsecases   feiraInterfaces.FeirasUsecases
 )

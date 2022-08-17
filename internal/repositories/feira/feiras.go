@@ -6,6 +6,7 @@ import (
 	"github.com/fsvxavier/unico/database"
 	feiraInterfaces "github.com/fsvxavier/unico/internal/interfaces/feira"
 	"github.com/fsvxavier/unico/internal/models"
+	"github.com/fsvxavier/unico/pkg/logger"
 	"gorm.io/gorm"
 )
 
@@ -83,10 +84,16 @@ func (f *feirasRepository) GetFeira(id string) (models.FeiraLivre, error) {
 
 func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
 
-	feira.ID = ""
+	logg := new(logger.GenericLogger)
+	logg.Module = "api"
+	logg.GetLogger()
 
-	f.db.Create(&feira)
-	return Feira, nil
+	var dbConn database.DbConnect
+	db := dbConn.ConnectDB()
+
+	err := db.Create(&feira).Error
+
+	return feira, err
 }
 
 func (f *feirasRepository) UpdateFeira(id string, inUpFeira models.FeiraLivre) (models.FeiraLivre, error) {

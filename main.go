@@ -91,8 +91,6 @@ func main() {
 	}))
 
 	app.Get("/apimetrics", monitor.New(monitor.Config{
-		Title:   "Fiber Monitor",
-		Refresh: 3 * time.Second,
 		APIOnly: true,
 		Next:    nil,
 	}))
@@ -100,7 +98,7 @@ func main() {
 	app.Use(pprof.New())
 
 	// Initialize config default Logger
-	fileLog, err := os.OpenFile("logs/fiber_"+currentTime.Format("2006-01-02")+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
+	fileLog, err := os.OpenFile("logs/"+currentTime.Format("2006-01-02")+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
 		msgError := fmt.Sprintf("Error opening file: %v", err)
 		logLogrus.LogIt("ERROR", msgError, nil)

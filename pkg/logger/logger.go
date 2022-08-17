@@ -32,7 +32,7 @@ func initLogger() *logrus.Logger {
 
 	if os.Getenv("LOG_FILE_PATH") != "" {
 		currentTime := time.Now()
-		f, err := os.OpenFile(os.Getenv("LOG_FILE_PATH")+"/logrus_"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		f, err := os.OpenFile(os.Getenv("LOG_FILE_PATH")+"/logrus_"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 		if err == nil {
 			rootLogger.SetOutput(f)
 		}
