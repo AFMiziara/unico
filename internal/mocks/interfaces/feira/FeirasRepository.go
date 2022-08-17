@@ -16,18 +16,18 @@ type FeirasRepository struct {
 }
 
 // CreateFeira provides a mock function with given fields: feira
-func (_m *FeirasRepository) CreateFeira(feira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (_m *FeirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
 	ret := _m.Called(feira)
 
-	var r0 models.InsertUpdateFeiras
-	if rf, ok := ret.Get(0).(func(models.InsertUpdateFeiras) models.InsertUpdateFeiras); ok {
+	var r0 models.FeiraLivre
+	if rf, ok := ret.Get(0).(func(models.FeiraLivre) models.FeiraLivre); ok {
 		r0 = rf(feira)
 	} else {
-		r0 = ret.Get(0).(models.InsertUpdateFeiras)
+		r0 = ret.Get(0).(models.FeiraLivre)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(models.InsertUpdateFeiras) error); ok {
+	if rf, ok := ret.Get(1).(func(models.FeiraLivre) error); ok {
 		r1 = rf(feira)
 	} else {
 		r1 = ret.Error(1)

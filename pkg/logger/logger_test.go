@@ -9,9 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Override for testing
-var osHostname = os.Hostname
-
 func TestLogger(t *testing.T) {
 	t.Run("success-severity", func(t *testing.T) {
 		os.Setenv("ENV", "teste")

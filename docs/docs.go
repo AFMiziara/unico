@@ -41,7 +41,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.InsertUpdateFeiras"
+                            "$ref": "#/definitions/models.FeiraLivre"
                         }
                     }
                 ],
@@ -239,59 +239,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
-                },
-                "lat": {
-                    "type": "integer"
-                },
-                "logradouro": {
-                    "type": "string"
-                },
-                "longi": {
-                    "type": "integer"
-                },
-                "nome_feira": {
-                    "type": "string"
-                },
-                "numero": {
-                    "type": "string"
-                },
-                "referencia": {
-                    "type": "string"
-                },
-                "regiao5": {
-                    "type": "string"
-                },
-                "regiao8": {
-                    "type": "string"
-                },
-                "registro": {
-                    "type": "string"
-                },
-                "setcens": {
-                    "type": "integer"
-                },
-                "subprefe": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.InsertUpdateFeiras": {
-            "type": "object",
-            "properties": {
-                "areap": {
-                    "type": "integer"
-                },
-                "bairro": {
-                    "type": "string"
-                },
-                "coddist": {
-                    "type": "integer"
-                },
-                "codsubpref": {
-                    "type": "integer"
-                },
-                "distrito": {
                     "type": "string"
                 },
                 "lat": {

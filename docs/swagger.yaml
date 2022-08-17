@@ -37,41 +37,6 @@ definitions:
       subprefe:
         type: string
     type: object
-  models.InsertUpdateFeiras:
-    properties:
-      areap:
-        type: integer
-      bairro:
-        type: string
-      coddist:
-        type: integer
-      codsubpref:
-        type: integer
-      distrito:
-        type: string
-      lat:
-        type: integer
-      logradouro:
-        type: string
-      longi:
-        type: integer
-      nome_feira:
-        type: string
-      numero:
-        type: string
-      referencia:
-        type: string
-      regiao5:
-        type: string
-      regiao8:
-        type: string
-      registro:
-        type: string
-      setcens:
-        type: integer
-      subprefe:
-        type: string
-    type: object
   models.SearchFeira:
     properties:
       bairro:
@@ -109,7 +74,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/models.InsertUpdateFeiras'
+          $ref: '#/definitions/models.FeiraLivre'
       produces:
       - application/json
       responses:

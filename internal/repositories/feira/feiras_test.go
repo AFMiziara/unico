@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	fr FeirasRepository
+	fr feirasRepository
 )
 
 func SetupTests() {
@@ -25,6 +25,84 @@ func SetupTests() {
 
 }
 
+func Test1CreateFeira(t *testing.T) {
+
+	SetupTests()
+
+	mockFeiras := models.FeiraLivre{
+		Longi:      0,
+		Lat:        0,
+		Setcens:    0,
+		Areap:      0,
+		Coddist:    0,
+		Distrito:   "",
+		Codsubpref: 0,
+		Subprefe:   "",
+		Regiao5:    "",
+		Regiao8:    "",
+		NomeFeira:  "",
+		Registro:   "",
+		Logradouro: "",
+		Numero:     "",
+		Bairro:     "",
+		Referencia: "",
+	}
+
+	t.Run("sucess", func(t *testing.T) {
+
+		p, err := fr.CreateFeira(mockFeiras)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, p)
+	})
+}
+
+func Test2UpdateFeira(t *testing.T) {
+
+	SetupTests()
+
+	mockFeiras := models.InsertUpdateFeiras{
+		Longi:      0,
+		Lat:        0,
+		Setcens:    0,
+		Areap:      0,
+		Coddist:    0,
+		Distrito:   "",
+		Codsubpref: 0,
+		Subprefe:   "",
+		Regiao5:    "",
+		Regiao8:    "",
+		NomeFeira:  "",
+		Registro:   "",
+		Logradouro: "",
+		Numero:     "",
+		Bairro:     "",
+		Referencia: "",
+	}
+
+	t.Run("sucess", func(t *testing.T) {
+
+		id := "76fd5aa6-b4b7-4193-b1ff-96209e67c7fd"
+		p, err := fr.UpdateFeira(id, mockFeiras)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, p)
+	})
+}
+
+func Test3DeleteFeira(t *testing.T) {
+
+	SetupTests()
+
+	t.Run("sucess", func(t *testing.T) {
+
+		id := "76fd5aa6-b4b7-4193-b1ff-96209e67c7fd"
+		err := fr.DeleteFeira(id)
+
+		assert.NoError(t, err)
+	})
+}
+
 func TestGetFeiraSearch(t *testing.T) {
 
 	SetupTests()
@@ -32,9 +110,6 @@ func TestGetFeiraSearch(t *testing.T) {
 	mockSearchData := models.SearchFeira{
 		Pagina:    "1",
 		Bairro:    "FORMOSA",
-		Distrito:  "ARICANDUVA",
-		Regiao5:   "Leste",
-		NomeFeira: "RECORD",
 	}
 	t.Run("sucess_GetFeiraSearch", func(t *testing.T) {
 

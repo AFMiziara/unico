@@ -27,7 +27,7 @@ func (f *FeirasUsecases) GetFeira(id string) ([]models.FeiraLivre, error) {
 	return f.FeirasRepository.GetFeira(id)
 }
 
-func (f *FeirasUsecases) CreateFeira(feira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (f *FeirasUsecases) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
 	return f.FeirasRepository.CreateFeira(feira)
 }
 

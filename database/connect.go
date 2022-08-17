@@ -20,9 +20,7 @@ var (
 	DbConn *gorm.DB
 )
 
-type DbConnect struct {
-	DbConn *gorm.DB
-}
+type DbConnect struct{}
 
 // ConnectDB connect to db
 func (d *DbConnect) ConnectDB() *gorm.DB {
@@ -110,8 +108,6 @@ func (d *DbConnect) ConnectDB() *gorm.DB {
 		}
 
 	}
-
-	d.DbConn = DbConn
 
 	return DbConn
 }

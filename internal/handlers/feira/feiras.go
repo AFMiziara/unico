@@ -97,25 +97,25 @@ func GetFeira(c *fiber.Ctx) error {
 // @Description Feiras API
 // @Accept  json
 // @Produce  json
-// @Param data body models.InsertUpdateFeiras true "body request"
+// @Param data body models.FeiraLivre true "body request"
 // @Success 200
 // @Failure 500
 // @Router /api/feiras [post]
 func CreateFeira(c *fiber.Ctx) error {
 
 	// Store the body in the note and return error if encountered
-	err := c.BodyParser(&InUpFeiras)
+	err := c.BodyParser(&Feira)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input", "data": err})
 	}
 	// Create the Feira and return error if encountered
-	inUpFeira, err := feirasUsecases.CreateFeira(InUpFeiras)
+	feira, err := feirasUsecases.CreateFeira(Feira)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Could not create Feira - " + fmt.Sprintf("%s", err), "data": nil})
 	}
 
 	// Return the created Feira
-	return c.JSON(fiber.Map{"status": "success", "message": "Created data", "data": inUpFeira})
+	return c.JSON(fiber.Map{"status": "success", "message": "Created data", "data": feira})
 }
 
 // @Summary Feiras

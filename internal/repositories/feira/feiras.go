@@ -10,33 +10,34 @@ import (
 	"github.com/fsvxavier/unico/pkg/logger"
 )
 
-type FeirasRepository struct{}
+type feirasRepository struct{}
 
 var (
 	Feiras []models.FeiraLivre
 	Feira  models.FeiraLivre
-	dbConn database.DbConnect
-	paging database.Pagination
 )
 
 // NewFeirasRepository exports an interface to FeirasRepository
 func NewFeirasRepository() feiraInterfaces.FeirasRepository {
-	return &FeirasRepository{}
+	return &feirasRepository{}
 }
 
-func (f *FeirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pagination, error) {
+func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pagination, error) {
 
 	logg := new(logger.GenericLogger)
 	logg.Module = "api"
 	logg.GetLogger()
 
+	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
 	numPage, err := strconv.Atoi(feira.Pagina)
 	if err != nil {
-		return paging, err
-	} else {
-		paging.Page = numPage
+		return database.Pagination{}, err
+	}
+
+	paging := database.Pagination{
+		Page: numPage,
 	}
 
 	if feira.Distrito != "" {
@@ -55,27 +56,30 @@ func (f *FeirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pa
 		db = db.Where("bairro like ?", "%"+feira.Bairro+"%")
 	}
 
-	db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras)
+	err = db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras).Error
 
 	paging.Rows = Feiras
 
 	return paging, err
 }
 
-func (f *FeirasRepository) GetFeirasPagination(page string) (database.Pagination, error) {
+func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination, error) {
 
 	logg := new(logger.GenericLogger)
 	logg.Module = "api"
 	logg.GetLogger()
 
+	var dbConn database.DbConnect
+	db := dbConn.ConnectDB()
+
 	numPage, err := strconv.Atoi(page)
 	if err != nil {
-		return paging, err
-	} else {
-		paging.Page = numPage
+		return database.Pagination{}, err
 	}
 
-	db := dbConn.ConnectDB()
+	paging := database.Pagination{
+		Page: numPage,
+	}
 
 	err = db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras).Error
 	if err != nil {
@@ -86,12 +90,13 @@ func (f *FeirasRepository) GetFeirasPagination(page string) (database.Pagination
 	return paging, err
 }
 
-func (f *FeirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
+func (f *feirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
 
 	logg := new(logger.GenericLogger)
 	logg.Module = "api"
 	logg.GetLogger()
 
+	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
 	err := db.Find(&Feiras, "id = ?", id).Error
@@ -102,30 +107,33 @@ func (f *FeirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
 	return Feiras, err
 }
 
-func (f *FeirasRepository) CreateFeira(InUpFeira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
 
 	logg := new(logger.GenericLogger)
 	logg.Module = "api"
 	logg.GetLogger()
 
+	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
-	err := db.Create(&InUpFeira).Error
+	err := db.Create(&feira).Error
 	if err != nil {
 		logg.LogIt("FATAL", fmt.Sprintf("[FATAL] - Failed create data. Erro: %s", err.Error()), nil)
 	}
 
-	return InUpFeira, err
+	return feira, err
 }
 
-func (f *FeirasRepository) UpdateFeira(id string, InUpFeira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (f *feirasRepository) UpdateFeira(id string, InUpFeira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
 	err := db.Find(&Feira).Where("id = ?", id).Save(&InUpFeira).Error
 	return InUpFeira, err
 }
 
-func (f *FeirasRepository) DeleteFeira(id string) error {
+func (f *feirasRepository) DeleteFeira(id string) error {
+	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
 	err := db.Delete(&Feira, "id = ?", id).Error

@@ -30,16 +30,6 @@ func initLogger() *logrus.Logger {
 	}
 	rootLogger.SetLevel(getLogLevel("LOG_LEVEL"))
 
-	if os.Getenv("LOG_FILE_PATH") != "" {
-		currentTime := time.Now()
-		f, err := os.OpenFile(os.Getenv("LOG_FILE_PATH")+"/logrus_"+currentTime.Format("2006-01-02")+".log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-		if err == nil {
-			rootLogger.SetOutput(f)
-		}
-	} else {
-		rootLogger.SetOutput(os.Stderr)
-	}
-
 	return rootLogger
 }
 

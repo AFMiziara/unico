@@ -151,7 +151,7 @@ func TestGetFeirasPagination(t *testing.T) {
 }
 
 func TestCreateFeira(t *testing.T) {
-	mockFeiras := models.InsertUpdateFeiras{
+	mockFeiras := models.FeiraLivre{
 		Longi:      0,
 		Lat:        0,
 		Setcens:    0,
