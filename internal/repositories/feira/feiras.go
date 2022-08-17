@@ -92,6 +92,8 @@ func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLiv
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
+	feira.ID = ""
+
 	err := db.Clauses(clause.Returning{}).Create(&feira).Error
 
 	return feira, err
