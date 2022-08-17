@@ -1,16 +1,17 @@
 package feiraRepositories
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/fsvxavier/unico/database"
 	feiraInterfaces "github.com/fsvxavier/unico/internal/interfaces/feira"
 	"github.com/fsvxavier/unico/internal/models"
-	"github.com/fsvxavier/unico/pkg/logger"
+	"gorm.io/gorm"
 )
 
-type feirasRepository struct{}
+type feirasRepository struct {
+	db *gorm.DB
+}
 
 var (
 	Feiras []models.FeiraLivre
@@ -18,15 +19,11 @@ var (
 )
 
 // NewFeirasRepository exports an interface to FeirasRepository
-func NewFeirasRepository() feiraInterfaces.FeirasRepository {
-	return &feirasRepository{}
+func NewFeirasRepository(db *gorm.DB) feiraInterfaces.FeirasRepository {
+	return &feirasRepository{db: db}
 }
 
 func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pagination, error) {
-
-	logg := new(logger.GenericLogger)
-	logg.Module = "api"
-	logg.GetLogger()
 
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
@@ -65,10 +62,6 @@ func (f *feirasRepository) GetFeiraSearch(feira models.SearchFeira) (database.Pa
 
 func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination, error) {
 
-	logg := new(logger.GenericLogger)
-	logg.Module = "api"
-	logg.GetLogger()
-
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
@@ -82,9 +75,6 @@ func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination
 	}
 
 	err = db.Scopes(paging.Paginates(Feiras, db)).Find(&Feiras).Error
-	if err != nil {
-		logg.LogIt("FATAL", fmt.Sprintf("[FATAL] - Failed search and pagination data. Erro: %s", err.Error()), nil)
-	}
 	paging.Rows = Feiras
 
 	return paging, err
@@ -92,44 +82,31 @@ func (f *feirasRepository) GetFeirasPagination(page string) (database.Pagination
 
 func (f *feirasRepository) GetFeira(id string) ([]models.FeiraLivre, error) {
 
-	logg := new(logger.GenericLogger)
-	logg.Module = "api"
-	logg.GetLogger()
-
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
 	err := db.Find(&Feiras, "id = ?", id).Error
-	if err != nil {
-		logg.LogIt("FATAL", fmt.Sprintf("[FATAL] - Failed search data. Erro: %s", err.Error()), nil)
-	}
 
 	return Feiras, err
 }
 
-func (f *feirasRepository) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre, error) {
-
-	logg := new(logger.GenericLogger)
-	logg.Module = "api"
-	logg.GetLogger()
+func (f *feirasRepository) CreateFeira(Feira models.FeiraLivre) (models.FeiraLivre, error) {
 
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
-	err := db.Create(&feira).Error
-	if err != nil {
-		logg.LogIt("FATAL", fmt.Sprintf("[FATAL] - Failed create data. Erro: %s", err.Error()), nil)
-	}
-
-	return feira, err
+	db.Create(&Feira)
+	return Feira, nil
 }
 
-func (f *feirasRepository) UpdateFeira(id string, InUpFeira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (f *feirasRepository) UpdateFeira(id string, InUpFeira models.FeiraLivre) (models.FeiraLivre, error) {
 	var dbConn database.DbConnect
 	db := dbConn.ConnectDB()
 
-	err := db.Find(&Feira).Where("id = ?", id).Save(&InUpFeira).Error
-	return InUpFeira, err
+	InUpFeira.ID = id
+
+	db.Find(&Feira).Where("id = ?", id).Save(&InUpFeira)
+	return InUpFeira, nil
 }
 
 func (f *feirasRepository) DeleteFeira(id string) error {

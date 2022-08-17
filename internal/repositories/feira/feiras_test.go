@@ -1,16 +1,20 @@
 package feiraRepositories
 
 import (
+	"errors"
 	"os"
 	"testing"
 
+	"github.com/fsvxavier/unico/database"
+	feiraInterfaces "github.com/fsvxavier/unico/internal/interfaces/feira"
 	"github.com/fsvxavier/unico/internal/models"
 	"github.com/fsvxavier/unico/pkg/enviroment"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	fr feirasRepository
+	fr     feiraInterfaces.FeirasRepository
+	idTest string
 )
 
 func SetupTests() {
@@ -23,9 +27,53 @@ func SetupTests() {
 
 	os.Setenv("EXECUTE_MIGRATION", "FALSE")
 
+	var dbConn database.DbConnect
+	db := dbConn.ConnectDB()
+
+	fr = NewFeirasRepository(db)
+
 }
 
-func Test1CreateFeira(t *testing.T) {
+func TestCreateFeira(t *testing.T) {
+
+	SetupTests()
+
+	mockFeiras := models.FeiraLivre{
+		Longi:      -1,
+		Lat:        -1,
+		Setcens:    1,
+		Areap:      1,
+		Coddist:    1,
+		Codsubpref: 1,
+		Distrito:   "asdasd",
+		Subprefe:   "asdasd",
+		Regiao5:    "asdasd",
+		Regiao8:    "asdasd",
+		NomeFeira:  "asdasd",
+		Registro:   "asdasd",
+		Logradouro: "asdasd",
+		Numero:     "asdasd",
+		Bairro:     "asdasd",
+		Referencia: "asdasd",
+	}
+
+	t.Run("sucess", func(t *testing.T) {
+
+		var err error = nil
+
+		p, _ := fr.CreateFeira(mockFeiras)
+		if p.ID == "" {
+			err = errors.New("LastInsertId is empty")
+		}
+
+		idTest = p.ID
+
+		assert.NoError(t, err)
+		assert.NotNil(t, p)
+	})
+}
+
+func TestUpdateFeira(t *testing.T) {
 
 	SetupTests()
 
@@ -50,18 +98,28 @@ func Test1CreateFeira(t *testing.T) {
 
 	t.Run("sucess", func(t *testing.T) {
 
-		p, err := fr.CreateFeira(mockFeiras)
+		var err error = nil
+
+		c, _ := fr.CreateFeira(mockFeiras)
+		if c.ID == "" {
+			err = errors.New("LastInsertId is empty")
+		}
+
+		p, _ := fr.UpdateFeira(c.ID, mockFeiras)
+		if p.ID == "" {
+			err = errors.New("Error Update data")
+		}
 
 		assert.NoError(t, err)
 		assert.NotNil(t, p)
 	})
 }
 
-func Test2UpdateFeira(t *testing.T) {
+func TestDeleteFeira(t *testing.T) {
 
 	SetupTests()
 
-	mockFeiras := models.InsertUpdateFeiras{
+	mockFeiras := models.FeiraLivre{
 		Longi:      0,
 		Lat:        0,
 		Setcens:    0,
@@ -82,22 +140,9 @@ func Test2UpdateFeira(t *testing.T) {
 
 	t.Run("sucess", func(t *testing.T) {
 
-		id := "76fd5aa6-b4b7-4193-b1ff-96209e67c7fd"
-		p, err := fr.UpdateFeira(id, mockFeiras)
+		c, _ := fr.CreateFeira(mockFeiras)
 
-		assert.NoError(t, err)
-		assert.NotNil(t, p)
-	})
-}
-
-func Test3DeleteFeira(t *testing.T) {
-
-	SetupTests()
-
-	t.Run("sucess", func(t *testing.T) {
-
-		id := "76fd5aa6-b4b7-4193-b1ff-96209e67c7fd"
-		err := fr.DeleteFeira(id)
+		err := fr.DeleteFeira(c.ID)
 
 		assert.NoError(t, err)
 	})
@@ -110,6 +155,9 @@ func TestGetFeiraSearch(t *testing.T) {
 	mockSearchData := models.SearchFeira{
 		Pagina:    "1",
 		Bairro:    "FORMOSA",
+		Distrito:  "VILA FORMOSA",
+		Regiao5:   "Leste",
+		NomeFeira: "MANOEL",
 	}
 	t.Run("sucess_GetFeiraSearch", func(t *testing.T) {
 

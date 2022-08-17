@@ -116,18 +116,18 @@ func (_m *FeirasRepository) GetFeirasPagination(page string) (database.Paginatio
 }
 
 // UpdateFeira provides a mock function with given fields: id, feira
-func (_m *FeirasRepository) UpdateFeira(id string, feira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (_m *FeirasRepository) UpdateFeira(id string, feira models.FeiraLivre) (models.FeiraLivre, error) {
 	ret := _m.Called(id, feira)
 
-	var r0 models.InsertUpdateFeiras
-	if rf, ok := ret.Get(0).(func(string, models.InsertUpdateFeiras) models.InsertUpdateFeiras); ok {
+	var r0 models.FeiraLivre
+	if rf, ok := ret.Get(0).(func(string, models.FeiraLivre) models.FeiraLivre); ok {
 		r0 = rf(id, feira)
 	} else {
-		r0 = ret.Get(0).(models.InsertUpdateFeiras)
+		r0 = ret.Get(0).(models.FeiraLivre)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, models.InsertUpdateFeiras) error); ok {
+	if rf, ok := ret.Get(1).(func(string, models.FeiraLivre) error); ok {
 		r1 = rf(id, feira)
 	} else {
 		r1 = ret.Error(1)

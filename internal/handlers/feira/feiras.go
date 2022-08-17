@@ -3,8 +3,10 @@ package feiraHandler
 import (
 	"fmt"
 
+	"github.com/fsvxavier/unico/database"
 	feiraInterfaces "github.com/fsvxavier/unico/internal/interfaces/feira"
 	"github.com/fsvxavier/unico/internal/models"
+	feiraRepository "github.com/fsvxavier/unico/internal/repositories/feira"
 	feiraUsecases "github.com/fsvxavier/unico/internal/usecases/feira"
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,7 +20,11 @@ var (
 	feirasUsecases   feiraInterfaces.FeirasUsecases
 )
 
-func init() {
+func initFeiraHandler() {
+	var dbConn database.DbConnect
+	db := dbConn.ConnectDB()
+
+	feirasRepository = feiraRepository.NewFeirasRepository(db)
 	feirasUsecases = feiraUsecases.NewFeirasUsecases(feirasRepository)
 }
 
@@ -31,6 +37,8 @@ func init() {
 // @Failure 500
 // @Router /api/feiras/search [post]
 func GetFeiraSearch(c *fiber.Ctx) error {
+
+	initFeiraHandler()
 
 	// Store the body in the note and return error if encountered
 	err := c.BodyParser(&SearchFeira)
@@ -66,6 +74,8 @@ func GetFeiraSearch(c *fiber.Ctx) error {
 // @Router /api/feiras/p/{page} [get]
 func GetFeirasPagination(c *fiber.Ctx) error {
 
+	initFeiraHandler()
+
 	paging, _ := feirasUsecases.GetFeirasPagination(c.Params("page", "1"))
 
 	// If no note is present return an error
@@ -87,6 +97,8 @@ func GetFeirasPagination(c *fiber.Ctx) error {
 // @Router /api/feiras/{id} [get]
 func GetFeira(c *fiber.Ctx) error {
 
+	initFeiraHandler()
+
 	feira, _ := feirasUsecases.GetFeira(c.Params("id"))
 
 	// Return the Feira with the Id
@@ -102,6 +114,8 @@ func GetFeira(c *fiber.Ctx) error {
 // @Failure 500
 // @Router /api/feiras [post]
 func CreateFeira(c *fiber.Ctx) error {
+
+	initFeiraHandler()
 
 	// Store the body in the note and return error if encountered
 	err := c.BodyParser(&Feira)
@@ -129,6 +143,8 @@ func CreateFeira(c *fiber.Ctx) error {
 // @Router /api/feiras/{id} [put]
 func UpdateFeira(c *fiber.Ctx) error {
 
+	initFeiraHandler()
+
 	// Read the param FeiraId
 	id := c.Params("id", "")
 
@@ -138,13 +154,13 @@ func UpdateFeira(c *fiber.Ctx) error {
 	}
 
 	// Store the body containing the updated data and return error if encountered
-	err := c.BodyParser(&InUpFeiras)
+	err := c.BodyParser(&Feira)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input - " + fmt.Sprintf("%s", err), "data": nil})
 	}
 
 	// Save the Changes
-	inUpFeira, err := feirasUsecases.UpdateFeira(id, InUpFeiras)
+	inUpFeira, err := feirasUsecases.UpdateFeira(id, Feira)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Could not Update Feira - " + fmt.Sprintf("%s", err), "data": nil})
 	}
@@ -162,6 +178,8 @@ func UpdateFeira(c *fiber.Ctx) error {
 // @Failure 404
 // @Router /api/feiras/{id} [delete]
 func DeleteFeira(c *fiber.Ctx) error {
+
+	initFeiraHandler()
 
 	// Read the param FeiraId
 	id := c.Params("id", "")

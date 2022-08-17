@@ -31,7 +31,7 @@ func (f *FeirasUsecases) CreateFeira(feira models.FeiraLivre) (models.FeiraLivre
 	return f.FeirasRepository.CreateFeira(feira)
 }
 
-func (f *FeirasUsecases) UpdateFeira(id string, feira models.InsertUpdateFeiras) (models.InsertUpdateFeiras, error) {
+func (f *FeirasUsecases) UpdateFeira(id string, feira models.FeiraLivre) (models.FeiraLivre, error) {
 	return f.FeirasRepository.UpdateFeira(id, feira)
 }
 
