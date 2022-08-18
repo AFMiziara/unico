@@ -17,6 +17,8 @@ services:
       - 5445:5432
     networks:
       - queue-pgsql
+    volumes:
+    - ../../migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
   pgsql-slave:
     image: docker.io/bitnami/postgresql:14
     restart: always
